@@ -22,6 +22,7 @@ class _QuizPageState extends State<QuizPage> {
   int correctCount = 0;
   String selectedChoice = '';
   bool canSelect = true;
+  bool isSelected = false;
 
   @override
   void initState() {
@@ -111,7 +112,16 @@ class _QuizPageState extends State<QuizPage> {
                     }
 
                     return TimerWidget(
-                      onComplete: () {},
+                      onComplete: () => Future.delayed(
+                        Duration.zero,
+                        () => setState(() {
+                          if (!isSelected) {
+                            errorCount += 1;
+                          }
+                          canSelect = false;
+                          isSelected = true;
+                        }),
+                      ),
                     );
                   }),
                 ),
