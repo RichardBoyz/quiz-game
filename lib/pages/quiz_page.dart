@@ -64,6 +64,66 @@ class _QuizPageState extends State<QuizPage> {
   Widget _buildLoading() => const Center(child: CircularProgressIndicator());
 
   Widget _buildQuestion(BuildContext context, QuizModel model) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+      child: Column(
+        children: [
+          Container(
+            height: 100,
+            padding: const EdgeInsets.all(10),
+            decoration: const BoxDecoration(
+                // color: Colors.blue[200],
+                ),
+            child: Row(
+              children: [
+                Flexible(
+                  flex: 4,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 1),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text('Question:'),
+                        Expanded(
+                          child: SingleChildScrollView(
+                            child: Text('${model.question}'),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                _buildInformationField(),
+                Flexible(
+                  child: Container(),
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children:
+                  _buildChoicesField(model.choices!, model.correctAnswer!),
+            ),
+          ),
+          _buildFooterButtonField(context, model.correctAnswer!),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildInformationField() {
+    return Container();
+  }
+
+  List<Widget> _buildChoicesField(List<String> choices, String answer) {
+    List<Widget> questionsWidget = [];
+
+    return questionsWidget;
+  }
+
+  Widget _buildFooterButtonField(BuildContext context, String answer) {
     return Container();
   }
 }
