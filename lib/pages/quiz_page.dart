@@ -23,6 +23,7 @@ class _QuizPageState extends State<QuizPage> {
   String selectedChoice = '';
   bool canSelect = true;
   bool isSelected = false;
+  bool isCorrectChoice = false;
 
   @override
   void initState() {
@@ -210,6 +211,37 @@ class _QuizPageState extends State<QuizPage> {
   }
 
   Widget _buildFooterButtonField(BuildContext context, String answer) {
-    return Container();
+    return !isSelected
+        ? ElevatedButton(
+            onPressed: () {
+              setState(() {
+                if (selectedChoice == answer) {
+                  isCorrectChoice = true;
+                  correctCount += 1;
+                } else {
+                  errorCount += 1;
+                }
+                isTimeStart = false;
+                isSelected = true;
+                canSelect = false;
+              });
+              context.read<TimerBloc>().add(const TimerPaused());
+            },
+            child: const Text('Confirm'),
+          )
+        : ElevatedButton(
+            onPressed: () {
+              _quizBloc.add(GetQuiz());
+              context.read<TimerBloc>().add(TimerReset());
+              setState(() {
+                isSelected = false;
+                selectedChoice = '';
+                isCorrectChoice = false;
+                isTimeStart = true;
+                canSelect = true;
+              });
+            },
+            child: const Text('Next'),
+          );
   }
 }
