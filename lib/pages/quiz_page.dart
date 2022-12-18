@@ -4,6 +4,7 @@ import 'package:quiz_game/blocs/quiz_bloc/quiz_bloc.dart';
 import 'package:quiz_game/blocs/timer_bloc/timer_bloc.dart';
 import 'package:quiz_game/models/quiz_model.dart';
 import 'package:quiz_game/models/ticker.dart';
+import 'package:quiz_game/widgets/timer_widget.dart';
 
 class QuizPage extends StatefulWidget {
   const QuizPage({super.key});
@@ -97,7 +98,9 @@ class _QuizPageState extends State<QuizPage> {
                 Flexible(
                   child: BlocBuilder<TimerBloc, TimerState>(
                       builder: (context, state) {
-                    return Container();
+                    return TimerWidget(
+                      onComplete: () {},
+                    );
                   }),
                 ),
               ],
