@@ -95,7 +95,10 @@ class _QuizPageState extends State<QuizPage> {
                 ),
                 _buildInformationField(),
                 Flexible(
-                  child: Container(),
+                  child: BlocBuilder<TimerBloc, TimerState>(
+                      builder: (context, state) {
+                    return Container();
+                  }),
                 ),
               ],
             ),
