@@ -20,6 +20,8 @@ class _QuizPageState extends State<QuizPage> {
   bool isTimeStart = true;
   int errorCount = 0;
   int correctCount = 0;
+  String selectedChoice = '';
+  bool canSelect = true;
 
   @override
   void initState() {
@@ -167,7 +169,14 @@ class _QuizPageState extends State<QuizPage> {
           child: Container(
             padding: const EdgeInsets.all(10),
             child: GestureDetector(
-              onTap: () {},
+              onTap: () {
+                if (canSelect) {
+                  setState(() {
+                    isTimeStart = false;
+                    selectedChoice = choices[i];
+                  });
+                }
+              },
               child: Container(
                 padding: const EdgeInsets.only(left: 10),
                 decoration: BoxDecoration(
