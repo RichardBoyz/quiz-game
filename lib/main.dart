@@ -41,9 +41,9 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(
-              'hello',
-              style: Theme.of(context).textTheme.headline4,
+            ElevatedButton(
+              onPressed: () => Navigator.pushNamed(context, 'quiz-page'),
+              child: const Text('Go'),
             ),
           ],
         ),
