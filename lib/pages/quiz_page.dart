@@ -193,6 +193,7 @@ class _QuizPageState extends State<QuizPage> {
                 decoration: BoxDecoration(
                   color: Colors.amber[200],
                   borderRadius: BorderRadius.circular(12),
+                  border: _choicesBorder(choices[i], answer),
                 ),
                 child: Align(
                   alignment: Alignment.centerLeft,
@@ -243,5 +244,24 @@ class _QuizPageState extends State<QuizPage> {
             },
             child: const Text('Next'),
           );
+  }
+
+  BoxBorder? _choicesBorder(String choice, String answer) {
+    Color color = Colors.black;
+    if (isSelected) {
+      if (choice == answer) {
+        color = Colors.green;
+      } else if (selectedChoice == choice) {
+        color = Colors.red;
+      } else {
+        return null;
+      }
+    } else {
+      if (selectedChoice != choice || selectedChoice == '') {
+        return null;
+      }
+    }
+
+    return Border.all(color: color, width: 5);
   }
 }
