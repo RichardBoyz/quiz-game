@@ -8,5 +8,18 @@ part 'quiz_state.dart';
 class QuizBloc extends Bloc<QuizEvent, QuizState> {
   QuizBloc() : super(QuizInitial()) {
     final ApiRepository apiRepository = ApiRepository();
+
+    on<GetQuiz>((event, emit) async {
+      try {
+        emit(QuizLoading());
+        final quiz = await apiRepository.fetchQuiz();
+        emit(QuizLoaded(quiz));
+        if (quiz.error != null) {
+          emit(QuizError(quiz.error));
+        }
+      } on NetworkError {
+        emit(const QuizError("Failed to fetch data. is your device online?"));
+      }
+    });
   }
 }
