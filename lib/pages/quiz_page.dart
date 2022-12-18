@@ -18,6 +18,8 @@ class _QuizPageState extends State<QuizPage> {
   final TimerBloc _timer = TimerBloc(ticker: const Ticker());
 
   bool isTimeStart = true;
+  int errorCount = 0;
+  int correctCount = 0;
 
   @override
   void initState() {
@@ -128,7 +130,33 @@ class _QuizPageState extends State<QuizPage> {
   }
 
   Widget _buildInformationField() {
-    return Container();
+    return Flexible(
+        child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text('Done: ${errorCount + correctCount}'),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(
+              Icons.done,
+              color: Colors.green,
+            ),
+            Text(': $correctCount'),
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(
+              Icons.close,
+              color: Colors.red,
+            ),
+            Text(': $errorCount'),
+          ],
+        )
+      ],
+    ));
   }
 
   List<Widget> _buildChoicesField(List<String> choices, String answer) {
