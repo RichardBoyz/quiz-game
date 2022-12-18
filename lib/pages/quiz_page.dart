@@ -161,6 +161,31 @@ class _QuizPageState extends State<QuizPage> {
 
   List<Widget> _buildChoicesField(List<String> choices, String answer) {
     List<Widget> questionsWidget = [];
+    for (var i = 0; i < choices.length; i += 1) {
+      questionsWidget.add(
+        Expanded(
+          child: Container(
+            padding: const EdgeInsets.all(10),
+            child: GestureDetector(
+              onTap: () {},
+              child: Container(
+                padding: const EdgeInsets.only(left: 10),
+                decoration: BoxDecoration(
+                  color: Colors.amber[200],
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    '${i + 1}. ${choices[i]}',
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+    }
 
     return questionsWidget;
   }
