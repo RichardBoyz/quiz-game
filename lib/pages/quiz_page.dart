@@ -17,6 +17,8 @@ class _QuizPageState extends State<QuizPage> {
   final QuizBloc _quizBloc = QuizBloc();
   final TimerBloc _timer = TimerBloc(ticker: const Ticker());
 
+  bool isTimeStart = true;
+
   @override
   void initState() {
     _quizBloc.add(GetQuiz());
@@ -98,6 +100,12 @@ class _QuizPageState extends State<QuizPage> {
                 Flexible(
                   child: BlocBuilder<TimerBloc, TimerState>(
                       builder: (context, state) {
+                    if (isTimeStart) {
+                      context
+                          .read<TimerBloc>()
+                          .add(TimerStarted(state.duration));
+                    }
+
                     return TimerWidget(
                       onComplete: () {},
                     );
