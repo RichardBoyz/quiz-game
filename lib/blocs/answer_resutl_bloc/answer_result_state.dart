@@ -7,4 +7,25 @@ abstract class AnswerResultState extends Equatable {
   List<Object> get props => [];
 }
 
-class AnswerResultInitial extends AnswerResultState {}
+class AnswerResultLoading extends AnswerResultState {
+  const AnswerResultLoading();
+}
+
+class AnswerResultLoaded extends AnswerResultState {
+  final AnswerResult answerResult;
+  const AnswerResultLoaded(
+      {this.answerResult = const AnswerResult(
+          canSelect: true,
+          isCorrectChoice: false,
+          isSelected: false,
+          correctCount: 0,
+          incorrectCount: 0,
+          selectedChoice: '')});
+  @override
+  // TODO: implement props
+  List<Object> get props => [answerResult];
+}
+
+class AnswerResultSetting extends AnswerResultState {
+  const AnswerResultSetting(AnswerResult answerResult);
+}
