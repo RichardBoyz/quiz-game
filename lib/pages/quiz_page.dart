@@ -103,40 +103,17 @@ class _QuizPageState extends State<QuizPage> {
                     ),
                   ),
                 ),
-                _buildInformationField(),
-                Flexible(
-                  child: BlocBuilder<TimerBloc, TimerState>(
-                      builder: (context, state) {
-                    if (isTimeStart) {
-                      context
-                          .read<TimerBloc>()
-                          .add(TimerStarted(state.duration));
-                    }
-
-                    return TimerWidget(
-                      onComplete: () => Future.delayed(
-                        Duration.zero,
-                        () => setState(() {
-                          if (!isSelected) {
-                            errorCount += 1;
-                          }
-                          canSelect = false;
-                          isSelected = true;
-                        }),
-                      ),
-                    );
-                  }),
-                ),
+                _buildInformationField(context),
+                Flexible(child: _buildTimerField(context)),
               ],
             ),
           ),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
-              children:
-                  _buildChoicesField(model.choices!, model.correctAnswer!),
-            ),
-          ),
+            children: _buildChoicesField(
+                model.choices!, model.correctAnswer!, context),
+          )),
           _buildFooterButtonField(context, model.correctAnswer!),
         ],
       ),
