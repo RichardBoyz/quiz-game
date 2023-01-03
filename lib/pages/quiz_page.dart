@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:quiz_game/blocs/answer_resutl_bloc/answer_result_bloc.dart';
 import 'package:quiz_game/blocs/quiz_bloc/quiz_bloc.dart';
 import 'package:quiz_game/blocs/timer_bloc/timer_bloc.dart';
 import 'package:quiz_game/models/quiz_model.dart';
@@ -246,18 +247,21 @@ class _QuizPageState extends State<QuizPage> {
           );
   }
 
-  BoxBorder? _choicesBorder(String choice, String answer) {
+  BoxBorder? _choicesBorder(
+      String choice, String answer, AnswerResultLoaded state) {
     Color color = Colors.black;
-    if (isSelected) {
+    if (state.answerResult.isSelected) {
       if (choice == answer) {
         color = Colors.green;
-      } else if (selectedChoice == choice) {
+      } else if (state.answerResult.selectedChoice == choice &&
+          !state.answerResult.isCorrectChoice) {
         color = Colors.red;
       } else {
         return null;
       }
     } else {
-      if (selectedChoice != choice || selectedChoice == '') {
+      if (state.answerResult.selectedChoice != choice ||
+          state.answerResult.selectedChoice == '') {
         return null;
       }
     }
