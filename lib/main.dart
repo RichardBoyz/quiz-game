@@ -44,7 +44,10 @@ class MyHomePage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             ElevatedButton(
-              onPressed: () => Navigator.pushNamed(context, 'quiz-page'),
+              onPressed: () =>
+                  Navigator.pushNamed(context, 'quiz-page').then((value) {
+                context.read<AnswerResultBloc>().add(const ResetAnswerResult());
+              }),
               child: const Text('Go'),
             ),
           ],
