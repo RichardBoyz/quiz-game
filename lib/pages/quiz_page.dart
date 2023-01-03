@@ -143,6 +143,50 @@ class _QuizPageState extends State<QuizPage> {
     );
   }
 
+  Widget _buildTimerField(BuildContext context) {
+    return BlocBuilder<TimerBloc, TimerState>(
+      builder: (context, state) {
+        return BlocBuilder<AnswerResultBloc, AnswerResultState>(
+            buildWhen: (previous, current) {
+          if (previous is AnswerResultLoaded && current is AnswerResultLoaded) {
+            if (previous.answerResult.isSelected == false &&
+                current.answerResult.isSelected == true) {
+              return true;
+            }
+          }
+          return false;
+        }, builder: (context, answerResultState) {
+          if (answerResultState is AnswerResultLoaded) {
+            if (!answerResultState.answerResult.isSelected) {
+              context.read<TimerBloc>().add(TimerStarted(state.duration));
+            } else {
+              context.read<TimerBloc>().add(const TimerPaused());
+            }
+
+            return TimerWidget(
+              onComplete: () {
+                context.read<AnswerResultBloc>().add(
+                      UpdateAnswerResult(
+                        answerResultState.answerResult.copyWith(
+                            isSelected: true,
+                            canSelect: false,
+                            incorrectCount: answerResultState
+                                    .answerResult.isCorrectChoice
+                                ? answerResultState.answerResult.incorrectCount
+                                : answerResultState
+                                        .answerResult.incorrectCount +
+                                    1),
+                      ),
+                    );
+              },
+            );
+          }
+          return const CircularProgressIndicator();
+        });
+      },
+    );
+  }
+
   Widget _buildInformationField(BuildContext context) {
     return Flexible(child: BlocBuilder<AnswerResultBloc, AnswerResultState>(
       builder: (context, state) {
