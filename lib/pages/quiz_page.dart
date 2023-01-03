@@ -143,12 +143,15 @@ class _QuizPageState extends State<QuizPage> {
     );
   }
 
-  Widget _buildInformationField() {
-    return Flexible(
-        child: Column(
+  Widget _buildInformationField(BuildContext context) {
+    return Flexible(child: BlocBuilder<AnswerResultBloc, AnswerResultState>(
+      builder: (context, state) {
+        if (state is AnswerResultLoaded) {
+          return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text('Done: ${errorCount + correctCount}'),
+              Text(
+                  'Done: ${state.answerResult.incorrectCount + state.answerResult.correctCount}'),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -156,7 +159,7 @@ class _QuizPageState extends State<QuizPage> {
               Icons.done,
               color: Colors.green,
             ),
-            Text(': $correctCount'),
+                  Text(': ${state.answerResult.correctCount}'),
           ],
         ),
         Row(
@@ -166,10 +169,15 @@ class _QuizPageState extends State<QuizPage> {
               Icons.close,
               color: Colors.red,
             ),
-            Text(': $errorCount'),
+                  Text(': ${state.answerResult.incorrectCount}'),
           ],
         )
       ],
+          );
+        } else {
+          return const CircularProgressIndicator();
+        }
+      },
     ));
   }
 
