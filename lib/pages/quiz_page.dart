@@ -173,20 +173,23 @@ class _QuizPageState extends State<QuizPage> {
     ));
   }
 
-  List<Widget> _buildChoicesField(List<String> choices, String answer) {
+  List<Widget> _buildChoicesField(
+      List<String> choices, String answer, BuildContext context) {
     List<Widget> questionsWidget = [];
     for (var i = 0; i < choices.length; i += 1) {
       questionsWidget.add(
         Expanded(
           child: Container(
             padding: const EdgeInsets.all(10),
-            child: GestureDetector(
+            child: BlocBuilder<AnswerResultBloc, AnswerResultState>(
+              builder: (context, state) {
+                if (state is AnswerResultLoaded) {
+                  return GestureDetector(
               onTap: () {
-                if (canSelect) {
-                  setState(() {
-                    isTimeStart = false;
-                    selectedChoice = choices[i];
-                  });
+                      if (state.answerResult.canSelect) {
+                        context.read<AnswerResultBloc>().add(UpdateAnswerResult(
+                            state.answerResult
+                                .copyWith(selectedChoice: choices[i])));
                 }
               },
               child: Container(
@@ -194,7 +197,7 @@ class _QuizPageState extends State<QuizPage> {
                 decoration: BoxDecoration(
                   color: Colors.amber[200],
                   borderRadius: BorderRadius.circular(12),
-                  border: _choicesBorder(choices[i], answer),
+                        border: _choicesBorder(choices[i], answer, state),
                 ),
                 child: Align(
                   alignment: Alignment.centerLeft,
@@ -203,6 +206,11 @@ class _QuizPageState extends State<QuizPage> {
                   ),
                 ),
               ),
+                  );
+                }
+
+                return const CircularProgressIndicator();
+              },
             ),
           ),
         ),
