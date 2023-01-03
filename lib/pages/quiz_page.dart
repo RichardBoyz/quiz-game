@@ -213,37 +213,39 @@ class _QuizPageState extends State<QuizPage> {
   }
 
   Widget _buildFooterButtonField(BuildContext context, String answer) {
-    return !isSelected
-        ? ElevatedButton(
+    return BlocBuilder<AnswerResultBloc, AnswerResultState>(
+      builder: (context, state) {
+        if (state is AnswerResultLoaded) {
+          return ElevatedButton(
             onPressed: () {
-              setState(() {
-                if (selectedChoice == answer) {
-                  isCorrectChoice = true;
-                  correctCount += 1;
+                if (state.answerResult.isSelected) {
+                  context.read<AnswerResultBloc>().add(
+                        ResetAnswerResultExcludeCount(state.answerResult),
+                      );
+                  _quizBloc.add(GetQuiz());
+                  _timer.add(TimerReset());
                 } else {
-                  errorCount += 1;
+                  bool isCorrectSelect =
+                      state.answerResult.selectedChoice == answer;
+                  context.read<AnswerResultBloc>().add(UpdateAnswerResult(
+                      state.answerResult.copyWith(
+                          canSelect: false,
+                          isSelected: true,
+                          correctCount: isCorrectSelect
+                              ? state.answerResult.correctCount + 1
+                              : state.answerResult.correctCount,
+                          incorrectCount: isCorrectSelect
+                              ? state.answerResult.incorrectCount
+                              : state.answerResult.incorrectCount + 1,
+                          isCorrectChoice:
+                              state.answerResult.selectedChoice == answer)));
+                  _timer.add(const TimerPaused());
                 }
-                isTimeStart = false;
-                isSelected = true;
-                canSelect = false;
-              });
-              context.read<TimerBloc>().add(const TimerPaused());
             },
-            child: const Text('Confirm'),
-          )
-        : ElevatedButton(
-            onPressed: () {
-              _quizBloc.add(GetQuiz());
-              context.read<TimerBloc>().add(TimerReset());
-              setState(() {
-                isSelected = false;
-                selectedChoice = '';
-                isCorrectChoice = false;
-                isTimeStart = true;
-                canSelect = true;
-              });
+              child: Text(state.answerResult.isSelected ? 'Next' : 'Confirm'));
+        }
+        return const CircularProgressIndicator();
             },
-            child: const Text('Next'),
           );
   }
 
