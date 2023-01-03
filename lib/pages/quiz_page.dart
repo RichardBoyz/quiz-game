@@ -18,14 +18,6 @@ class _QuizPageState extends State<QuizPage> {
   final QuizBloc _quizBloc = QuizBloc();
   final TimerBloc _timer = TimerBloc(ticker: const Ticker());
 
-  bool isTimeStart = true;
-  int errorCount = 0;
-  int correctCount = 0;
-  String selectedChoice = '';
-  bool canSelect = true;
-  bool isSelected = false;
-  bool isCorrectChoice = false;
-
   @override
   void initState() {
     _quizBloc.add(GetQuiz());
@@ -109,8 +101,8 @@ class _QuizPageState extends State<QuizPage> {
             ),
           ),
           Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
+              child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: _buildChoicesField(
                 model.choices!, model.correctAnswer!, context),
           )),
@@ -169,31 +161,31 @@ class _QuizPageState extends State<QuizPage> {
       builder: (context, state) {
         if (state is AnswerResultLoaded) {
           return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
               Text(
                   'Done: ${state.answerResult.incorrectCount + state.answerResult.correctCount}'),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(
-              Icons.done,
-              color: Colors.green,
-            ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(
+                    Icons.done,
+                    color: Colors.green,
+                  ),
                   Text(': ${state.answerResult.correctCount}'),
-          ],
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(
-              Icons.close,
-              color: Colors.red,
-            ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(
+                    Icons.close,
+                    color: Colors.red,
+                  ),
                   Text(': ${state.answerResult.incorrectCount}'),
-          ],
-        )
-      ],
+                ],
+              )
+            ],
           );
         } else {
           return const CircularProgressIndicator();
@@ -214,27 +206,27 @@ class _QuizPageState extends State<QuizPage> {
               builder: (context, state) {
                 if (state is AnswerResultLoaded) {
                   return GestureDetector(
-              onTap: () {
+                    onTap: () {
                       if (state.answerResult.canSelect) {
                         context.read<AnswerResultBloc>().add(UpdateAnswerResult(
                             state.answerResult
                                 .copyWith(selectedChoice: choices[i])));
-                }
-              },
-              child: Container(
-                padding: const EdgeInsets.only(left: 10),
-                decoration: BoxDecoration(
-                  color: Colors.amber[200],
-                  borderRadius: BorderRadius.circular(12),
+                      }
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.only(left: 10),
+                      decoration: BoxDecoration(
+                        color: Colors.amber[200],
+                        borderRadius: BorderRadius.circular(12),
                         border: _choicesBorder(choices[i], answer, state),
-                ),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    '${i + 1}. ${choices[i]}',
-                  ),
-                ),
-              ),
+                      ),
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          '${i + 1}. ${choices[i]}',
+                        ),
+                      ),
+                    ),
                   );
                 }
 
@@ -254,7 +246,7 @@ class _QuizPageState extends State<QuizPage> {
       builder: (context, state) {
         if (state is AnswerResultLoaded) {
           return ElevatedButton(
-            onPressed: () {
+              onPressed: () {
                 if (state.answerResult.isSelected) {
                   context.read<AnswerResultBloc>().add(
                         ResetAnswerResultExcludeCount(state.answerResult),
@@ -278,12 +270,12 @@ class _QuizPageState extends State<QuizPage> {
                               state.answerResult.selectedChoice == answer)));
                   _timer.add(const TimerPaused());
                 }
-            },
+              },
               child: Text(state.answerResult.isSelected ? 'Next' : 'Confirm'));
         }
         return const CircularProgressIndicator();
-            },
-          );
+      },
+    );
   }
 
   BoxBorder? _choicesBorder(
